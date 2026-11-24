@@ -1,624 +1,101 @@
 <!doctype html>
 <html lang="th">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<meta name="theme-color" content="#10182b">
-<title>KKN LOY KRATHONG 3D</title>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#080f20"><title>KKN LOY KRATHONG 3D | คืนแห่งแสงประทีป</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap');
-:root{--pink:#ed78a9;--gold:#f4cf79;--ink:#10182b;--cream:#fff8eb}
-*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#08101f;color:#fff;font-family:Kanit,system-ui,sans-serif}
-#game{position:fixed;inset:0}canvas{display:block;width:100%;height:100%;touch-action:none}
-#vignette{position:fixed;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(5,10,25,.58),transparent 24%,transparent 70%,rgba(5,10,25,.5))}
-.topbar{position:fixed;z-index:4;top:env(safe-area-inset-top,12px);left:0;right:0;padding:14px 18px;display:flex;align-items:center;gap:12px;pointer-events:none}
-.logo{width:48px;height:48px;border-radius:50%;background:#fff;border:2px solid var(--gold);display:grid;place-items:center;overflow:hidden;box-shadow:0 4px 18px #0008;flex:none}
-.logo img{width:100%;height:100%;object-fit:contain}.logo .fallback{font-size:11px;color:#17213b;font-weight:700}
-.brand{line-height:1.1;text-shadow:0 2px 10px #000}.brand b{font-size:17px;letter-spacing:.5px}.brand small{display:block;font-size:10px;letter-spacing:1.5px;color:#f5dca6;margin-top:4px}
-.status{margin-left:auto;border:1px solid #ffffff45;background:#111b32b8;padding:7px 11px;border-radius:99px;font-size:11px;color:#f9e9c7;backdrop-filter:blur(10px)}
-.intro{position:fixed;z-index:5;inset:0;display:flex;align-items:center;justify-content:center;padding:24px;background:linear-gradient(180deg,#08101d88,#08101d55)}
-.intro-card{width:min(460px,100%);text-align:center;padding:28px 24px 25px;border:1px solid #f2d69c66;border-radius:26px;background:linear-gradient(145deg,#17233beF,#10172bed);box-shadow:0 24px 80px #0009;backdrop-filter:blur(16px)}
-.intro-emblem{width:72px;height:72px;border-radius:50%;margin:0 auto 12px;background:#fff;display:grid;place-items:center;overflow:hidden;border:3px solid var(--gold)}
-.intro-emblem img{width:100%;height:100%;object-fit:contain}.intro-emblem span{color:#18223b;font-weight:700}
-.kicker{font-size:10px;letter-spacing:3px;color:var(--gold)}h1{font-size:clamp(27px,7vw,39px);margin:5px 0 0;letter-spacing:.4px}.thai{font-size:15px;color:#f4dcae;margin:2px 0 14px}.intro p{font-size:13px;line-height:1.7;color:#d5d9e3;margin:0 auto 19px;max-width:340px}
-.primary{border:0;border-radius:999px;padding:12px 27px;background:linear-gradient(135deg,#f28db7,#d94d91);color:white;font:600 15px Kanit;box-shadow:0 8px 25px #df589566;cursor:pointer}
-.hint{font-size:10px;color:#aeb8ca;margin-top:13px}
-.panel{position:fixed;z-index:3;left:50%;bottom:calc(15px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);width:min(620px,calc(100% - 24px));padding:12px;border:1px solid #ffffff42;border-radius:22px;background:linear-gradient(135deg,#101a2ddd,#1a2940e8);box-shadow:0 14px 50px #0008;backdrop-filter:blur(16px)}
-.panel-head{display:flex;align-items:center;justify-content:space-between;padding:0 3px 9px}.panel-head strong{font-size:14px}.panel-head small{font-size:10px;color:#c4cddd}
-.choices{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.choice{border:1px solid #ffffff30;background:#ffffff0c;border-radius:14px;padding:8px 4px;color:#fff;font:12px Kanit;cursor:pointer;min-width:0}
-.choice.active{border-color:#f5b9d3;background:#e96ea522;box-shadow:inset 0 0 0 1px #f5b9d344}
-.preview{height:44px;display:grid;place-items:center;font-size:27px}.choice small{display:block;color:#c7ccda;font-size:10px}
-.actions{display:flex;gap:8px;margin-top:9px}.actions button{flex:1}.secondary{border:1px solid #ffffff45;background:#ffffff12;border-radius:999px;color:#fff;padding:10px 12px;font:500 13px Kanit;cursor:pointer}
-#toast{position:fixed;z-index:8;left:50%;top:85px;transform:translate(-50%,-10px);opacity:0;transition:.25s;background:#17243bdf;border:1px solid #f1d18c66;border-radius:999px;padding:9px 15px;font-size:12px;pointer-events:none;white-space:nowrap}
-#prayer{display:none;position:fixed;z-index:7;inset:0;background:#030916b8;backdrop-filter:blur(8px);align-items:center;justify-content:center;padding:20px}
-.dialog{width:min(390px,100%);border:1px solid #f2d69c66;background:#142039;border-radius:22px;padding:20px;box-shadow:0 20px 60px #0009}
-.dialog h2{font-size:19px;margin:0 0 5px}.dialog p{font-size:12px;color:#c8d0df;margin:0 0 12px}
-textarea{width:100%;min-height:90px;resize:vertical;border:1px solid #ffffff38;border-radius:12px;background:#091326;color:#fff;padding:11px;font:13px Kanit;outline:none}
-.dialog-actions{display:flex;gap:8px;margin-top:12px}.dialog-actions>*{flex:1}
-#instructions{position:fixed;z-index:2;top:84px;left:50%;transform:translateX(-50%);font-size:11px;color:#fff;background:#0b1425a8;border:1px solid #ffffff28;border-radius:99px;padding:7px 13px;white-space:nowrap;pointer-events:none}
-#counter{position:fixed;right:15px;top:85px;z-index:2;border-radius:13px;padding:8px 11px;background:#0d172bb8;border:1px solid #ffffff2b;font-size:11px;color:#f9e8c5}
-.hidden{display:none!important}
-@media(max-width:520px){.topbar{padding:10px 13px}.logo{width:40px;height:40px}.brand b{font-size:15px}.status{font-size:10px;padding:6px 9px}#instructions{top:68px;font-size:10px}.panel{bottom:calc(9px + env(safe-area-inset-bottom,0px));padding:10px}.choice{padding:6px 2px}.preview{height:37px;font-size:24px}.actions .primary,.actions .secondary{font-size:12px;padding:9px 7px}#counter{top:68px;right:10px}}
-
-.firework-launch{position:fixed;z-index:3;right:15px;bottom:calc(190px + env(safe-area-inset-bottom,0px));border:1px solid #f6d58c88;border-radius:999px;padding:10px 15px;background:linear-gradient(135deg,#5b315d,#a64c83);color:#fff;font:600 13px Kanit;box-shadow:0 8px 28px #0008;cursor:pointer}
-#fireworkModal{display:none;position:fixed;z-index:9;inset:0;background:#030916c9;backdrop-filter:blur(9px);align-items:center;justify-content:center;padding:18px}
-.fw-dialog{width:min(430px,100%);max-height:90dvh;overflow:auto;border:1px solid #f2d69c77;background:linear-gradient(145deg,#17243e,#10182b);border-radius:23px;padding:20px;box-shadow:0 24px 80px #000b}
-.fw-dialog h2{font-size:20px;margin:0 0 4px}.fw-dialog p{font-size:12px;color:#c8d0df;margin:0 0 13px}
-.fw-label{display:block;font-size:12px;margin:12px 0 6px;color:#f7dfb4}
-#fwText{width:100%;border:1px solid #ffffff38;border-radius:12px;background:#091326;color:white;padding:11px;font:14px Kanit;outline:none}
-.fw-emojis{display:grid;grid-template-columns:repeat(8,1fr);gap:5px}
-.fw-emoji{border:1px solid #ffffff30;background:#ffffff0d;border-radius:10px;padding:7px 0;font-size:20px;cursor:pointer}
-.fw-emoji.active{border-color:#f2b5d2;background:#d94d912e}
-.fw-preview{margin-top:13px;border-radius:14px;background:radial-gradient(ellipse at center,#35415b,#090f1d);min-height:92px;display:grid;place-items:center;text-align:center;padding:10px;color:#fff}
-.fw-preview strong{font-size:22px;text-shadow:0 0 12px #ffb4dc}.fw-preview span{font-size:27px}
-.fw-buttons{display:flex;gap:8px;margin-top:13px}.fw-buttons>*{flex:1}
-@media(max-width:520px){.firework-launch{right:10px;bottom:calc(184px + env(safe-area-inset-bottom,0px));font-size:11px;padding:9px 12px}}
-
-
-/* Festival + character and DIY panels */
-.feature-launch{position:fixed;z-index:4;left:14px;bottom:calc(190px + env(safe-area-inset-bottom,0px));display:flex;gap:7px;flex-wrap:wrap;max-width:48%}
-.feature-launch button{border:1px solid #f4d28a88;border-radius:999px;padding:9px 13px;background:#17243ddd;color:#fff;font:500 12px Kanit;backdrop-filter:blur(12px);cursor:pointer}
-.feature-modal{display:none;position:fixed;z-index:10;inset:0;background:#030916d9;backdrop-filter:blur(9px);align-items:center;justify-content:center;padding:16px}
-.feature-card{width:min(460px,100%);max-height:90dvh;overflow:auto;border:1px solid #f2d69c77;background:linear-gradient(145deg,#17243e,#10182b);border-radius:23px;padding:19px;box-shadow:0 24px 80px #000b}
-.feature-card h2{font-size:19px;margin:0 0 5px}.feature-card p{font-size:12px;color:#c8d0df;margin:0 0 12px}
-.feature-card label{display:block;color:#f5dca6;font-size:12px;margin:10px 0 5px}
-.feature-card select,.feature-card input{width:100%;background:#091326;color:#fff;border:1px solid #ffffff3d;border-radius:10px;padding:10px;font:13px Kanit}
-.feature-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.feature-grid button{border:1px solid #ffffff30;border-radius:12px;background:#ffffff0c;color:#fff;padding:9px;font:12px Kanit;cursor:pointer}.feature-grid button.active{border-color:#f5b9d3;background:#e96ea522}
-.preview-row{display:flex;gap:10px;align-items:center;padding:10px;border-radius:13px;background:#ffffff0b;margin:9px 0}.avatar-preview{width:74px;height:95px;border-radius:12px;background:linear-gradient(#263b5b,#0b1424);display:grid;place-items:center;font-size:44px}
-.feature-actions{display:flex;gap:8px;margin-top:14px}.feature-actions>*{flex:1}
-@media(max-width:520px){.feature-launch{bottom:calc(236px + env(safe-area-inset-bottom,0px));left:8px;max-width:55%}.feature-launch button{font-size:10px;padding:8px 10px}}
-#movePad{display:none;position:fixed;z-index:4;left:18px;bottom:calc(18px + env(safe-area-inset-bottom,0px));width:126px;height:126px;border-radius:50%;border:1px solid #ffffff55;background:#101b30a8;backdrop-filter:blur(8px);touch-action:none;user-select:none}
-#moveKnob{position:absolute;width:54px;height:54px;left:35px;top:35px;border-radius:50%;background:linear-gradient(145deg,#f4c6dc,#d95c98);border:2px solid #fff9;box-shadow:0 4px 18px #0008;pointer-events:none}
-#movePad:after{content:'เดิน';position:absolute;inset:0;display:grid;place-items:center;color:#ffffff75;font-size:10px;pointer-events:none}
-body.has-player #movePad{display:block}
-@media(min-width:700px){#movePad{width:112px;height:112px}#moveKnob{left:29px;top:29px;width:50px;height:50px}}
-
-/* Clearly marked interactive festival shops */
-.feature-launch button,#openFireworks{box-shadow:0 5px 20px #0008;min-height:42px}
-.feature-launch button:active,#openFireworks:active{transform:scale(.97)}
-#shopGuide{max-width:190px}
-@media(max-width:520px){#shopGuide{top:112px;right:8px;gap:5px}#shopGuide>div{font-size:9px;padding:6px 8px}.feature-launch{max-width:64%}}
-
-
-#friendActions{margin-top:8px;padding-top:8px;border-top:1px solid #ffffff24}
-#friendActions .feature-grid button{min-height:43px}
-@media(max-width:520px){.feature-launch{max-width:72%}.feature-launch button{font-size:9px;padding:7px 9px}}
+:root{--gold:#f4d18a;--glass:rgba(9,18,35,.78);--line:rgba(255,226,170,.3)}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#071020;color:#fff;font-family:Kanit,system-ui,sans-serif}#scene{position:fixed;inset:0}canvas{display:block;width:100%;height:100%;touch-action:manipulation}
+.top{position:fixed;z-index:4;top:env(safe-area-inset-top,10px);left:0;right:0;display:flex;align-items:center;gap:11px;padding:12px 16px;pointer-events:none}.logo{width:48px;height:48px;border-radius:50%;background:#fff;border:2px solid var(--gold);display:grid;place-items:center;overflow:hidden;box-shadow:0 5px 22px #0008;flex:none}.logo img{width:100%;height:100%;object-fit:contain}.brand{line-height:1.1;text-shadow:0 2px 12px #000}.brand b{font-size:17px;letter-spacing:.5px}.brand small{display:block;color:#f5dca6;font-size:10px;letter-spacing:1.6px;margin-top:4px}.year{margin-left:auto;padding:7px 12px;border:1px solid #fff4;border-radius:30px;background:#0c1934b8;font-size:11px;color:#ffe7b6;backdrop-filter:blur(10px)}
+.hero{position:fixed;z-index:3;top:88px;left:50%;transform:translateX(-50%);text-align:center;width:calc(100% - 30px);pointer-events:none;text-shadow:0 2px 12px #000}.hero strong{display:block;font-size:clamp(17px,3vw,25px);font-weight:500;color:#ffe9bc;letter-spacing:1px}.hero span{font-size:11px;color:#e3d6c4}
+.bottom{position:fixed;z-index:5;left:50%;bottom:calc(17px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);width:min(660px,calc(100% - 22px));padding:12px;border:1px solid var(--line);border-radius:22px;background:linear-gradient(140deg,rgba(9,19,38,.9),rgba(20,31,51,.82));box-shadow:0 15px 55px #0009;backdrop-filter:blur(18px)}
+.actions{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.action{border:1px solid #fff3;border-radius:15px;padding:10px 5px;color:#fff;background:linear-gradient(145deg,#ffffff13,#ffffff07);font:500 13px Kanit;cursor:pointer;min-height:68px}.action .ico{display:block;font-size:25px;line-height:1.25}.action small{display:block;font-size:10px;color:#cbd3e0;margin-top:2px}.action.primary{border-color:#f2d08b88;background:linear-gradient(145deg,#8b6537aa,#49341fbb)}.tip{text-align:center;color:#c9d2e1;font-size:10px;margin-top:8px}
+#modal{display:none;position:fixed;z-index:10;inset:0;background:#020815c9;backdrop-filter:blur(9px);align-items:center;justify-content:center;padding:16px}.card{width:min(430px,100%);max-height:90dvh;overflow:auto;border:1px solid #f2d69c77;background:linear-gradient(145deg,#192943,#0c172b);border-radius:23px;padding:20px;box-shadow:0 24px 80px #000b}.card h2{font-size:20px;margin:0 0 4px;color:#ffebc4}.card p{font-size:12px;color:#c8d0df;margin:0 0 14px;line-height:1.6}.label{display:block;color:#f5dca6;font-size:12px;margin:11px 0 6px}select,input,textarea{width:100%;background:#081326;color:#fff;border:1px solid #ffffff3d;border-radius:11px;padding:11px;font:13px Kanit;outline:none}textarea{min-height:75px;resize:vertical}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.tile{border:1px solid #ffffff30;border-radius:12px;background:#ffffff0b;color:#fff;padding:10px 5px;font:12px Kanit;cursor:pointer}.tile.active{border-color:#f4d18a;background:#d8a64c2a}.tile span{display:block;font-size:22px;margin-bottom:3px}.row{display:flex;gap:8px;margin-top:14px}.row>*{flex:1}.btn{border:1px solid #fff4;border-radius:99px;padding:10px 13px;background:#ffffff12;color:#fff;font:500 13px Kanit;cursor:pointer}.btn.gold{border:0;background:linear-gradient(135deg,#f0d28f,#a87537);color:#1c1a18;font-weight:700}.hint{font-size:10px;color:#aeb9c9;margin-top:10px;line-height:1.5}
+#toast{position:fixed;z-index:12;top:82px;left:50%;transform:translate(-50%,-8px);opacity:0;transition:.25s;background:#101d34ee;border:1px solid #f1d18c77;border-radius:99px;padding:9px 15px;font-size:12px;pointer-events:none;white-space:nowrap}
+#count{position:fixed;z-index:3;top:145px;right:14px;background:#09162bc9;border:1px solid #ffffff30;border-radius:12px;padding:8px 11px;font-size:11px;color:#ffe9bd;backdrop-filter:blur(10px)}
+#intro{position:fixed;z-index:8;inset:0;display:flex;align-items:center;justify-content:center;padding:20px;background:linear-gradient(180deg,#06102088,#06102088)}.introCard{width:min(460px,100%);text-align:center;padding:27px 23px;border:1px solid #f1d18c88;border-radius:26px;background:linear-gradient(145deg,#1a2b47f2,#0c172bf2);box-shadow:0 24px 90px #000b;backdrop-filter:blur(14px)}.introLogo{width:72px;height:72px;border-radius:50%;background:#fff;border:3px solid var(--gold);overflow:hidden;margin:0 auto 12px;display:grid;place-items:center}.introLogo img{width:100%;height:100%;object-fit:contain}.kicker{font-size:10px;letter-spacing:3px;color:var(--gold)}h1{font-size:clamp(27px,7vw,39px);margin:5px 0}.introCard .thai{font-size:15px;color:#f4dcae}.introCard p{font-size:13px;line-height:1.8;color:#d5dce7;margin:10px auto 20px;max-width:350px}.primaryBtn{border:0;border-radius:99px;padding:12px 28px;background:linear-gradient(135deg,#f2d28e,#b17b3c);color:#241a0c;font:700 15px Kanit;cursor:pointer}
+@media(max-width:520px){.top{padding:9px 11px}.logo{width:39px;height:39px}.brand b{font-size:14px}.brand small{font-size:8px}.year{font-size:9px;padding:6px 8px}.hero{top:70px}.bottom{bottom:calc(9px + env(safe-area-inset-bottom,0px));padding:9px}.action{font-size:11px;min-height:63px}.action .ico{font-size:23px}.action small{font-size:9px}#count{top:118px;right:9px;font-size:10px}.card{padding:16px}}
 </style>
-<script type="importmap">
-{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js"}}
-</script>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js"}}</script>
 </head>
 <body>
-<div id="game"></div><div id="vignette"></div>
-<header class="topbar">
-  <div class="logo" id="topLogo"><span class="fallback">KKN</span></div>
-  <div class="brand"><b>KKN LOY KRATHONG 3D</b><small>KHAMKAENNAKORN SCHOOL</small></div>
-  <div class="status">เทศกาลลอยกระทง · ๒๕๖๙</div>
-</header>
-<div id="instructions">เดินเที่ยวงาน · สร้างตัวละคร · DIY กระทง · ปล่อยกระทง · ชมพลุ</div>
-<div id="counter">🪷 กระทงของคุณ <b id="count">0</b></div>
-<div class="intro" id="intro">
-  <div class="intro-card">
-    <div class="intro-emblem" id="introLogo"><span>KKN</span></div>
-    <div class="kicker">KHAMKAENNAKORN SCHOOL PRESENTS</div>
-    <h1>KKN LOY KRATHONG 3D</h1><div class="thai">ลอยประทีป อธิษฐานริมสายน้ำ</div>
-    <p>ก่อนเริ่มเล่น สร้างตัวละครของคุณ แล้วเดินเที่ยวตลาดเทศกาลที่คึกคัก ประดิษฐ์กระทงในแบบของคุณ เขียนคำอธิษฐาน และชมพลุหลากสีเหนือบึงน้ำ</p>
-    <button class="primary" id="start">เริ่มต้นสร้างตัวละคร</button>
-    <div class="hint">ขั้นแรก: สร้างตัวละคร · จากนั้นจึงเข้าสู่เทศกาล</div>
-  </div>
-</div>
-<section class="panel hidden" id="panel">
-  <div class="panel-head"><strong>🏮 ร้านกระทง KKN</strong><small>เลือกแบบที่ชอบ แล้วกดรับไปลอย</small></div>
-  <div class="choices">
-    <button class="choice active" data-type="leaf"><div class="preview">🌿</div><b>กระทงใบตอง</b><small>ธรรมชาติ · คลาสสิก</small></button>
-    <button class="choice" data-type="lotus"><div class="preview">🪷</div><b>กระทงดอกบัว</b><small>งดงาม · อ่อนหวาน</small></button>
-    <button class="choice" data-type="bread"><div class="preview">🍞</div><b>กระทงขนมปัง</b><small>เรียบง่าย · รักษ์โลก</small></button>
-  </div>
-  <div class="actions">
-    <button class="primary" id="receive">เลือกกระทงนี้ไปใช้</button>
-    <button class="secondary" id="reset">เริ่มใหม่</button>
-  </div>
-</section>
-<div id="prayer">
-  <div class="dialog">
-    <h2>✨ เขียนคำอธิษฐาน</h2>
-    <p>ขอให้คำอธิษฐานของคุณลอยไปกับสายน้ำ</p>
-    <textarea id="wish" maxlength="120" placeholder="ขอให้... (ไม่บังคับ)"></textarea>
-    <div class="dialog-actions"><button class="secondary" id="cancelWish">ยกเลิก</button><button class="primary" id="placeWish">ปล่อยกระทงลงน้ำ</button></div>
-  </div>
-</div>
-
-<button class="firework-launch" id="openFireworks">🎆 ร้านพลุอธิษฐาน</button>
-<div class="feature-launch"><button id="openCharacter">🧑 ตัวละคร</button><button id="openDIY">🪷 เข้าร้านกระทง</button><button id="openFriendShop">💗 เช่าเพื่อน</button></div>
-<div id="shopGuide" style="position:fixed;z-index:2;right:14px;top:126px;display:flex;flex-direction:column;gap:7px;pointer-events:none">
- <div style="padding:7px 11px;border-radius:12px;background:#14243bd9;border:1px solid #e9c77b77;font-size:11px;color:#ffe8b7">🪷 ร้านกระทง · เลือก / DIY / ใช้</div>
- <div style="padding:7px 11px;border-radius:12px;background:#14243bd9;border:1px solid #e9c77b77;font-size:11px;color:#ffe8b7">🎆 ร้านพลุ · เขียนข้อความ / จุดพลุ</div>
-</div>
-
-<div class="feature-modal" id="characterModal"><div class="feature-card"><h2>🧑 สร้างตัวละครของคุณ</h2><p>เลือกสไตล์ก่อนออกเดินเที่ยวในงานเทศกาล</p><div class="preview-row"><div class="avatar-preview" id="avatarPreview">🧑🏻</div><div><b id="avatarName">นักเที่ยวงาน KKN</b><div style="font-size:11px;color:#c8d0df">ตัวละครจะปรากฏในฉาก 3D</div></div></div>
-<label>รูปแบบตัวละคร</label><div class="feature-grid" id="avatarKinds"><button class="active" data-kind="boy">👦 นักเรียนชาย</button><button data-kind="girl">👧 นักเรียนหญิง</button><button data-kind="adult">🧑 ผู้ใหญ่</button><button data-kind="fantasy">🧚 แฟนตาซี</button></div>
-<label>ทรงผม</label><select id="hairStyle"><option value="short">ผมสั้น</option><option value="long">ผมยาว</option><option value="bun">มวยผม</option></select>
-<label>สีชุด</label><div class="feature-grid" id="outfitColors"><button class="active" data-color="#244a83">💙 น้ำเงิน</button><button data-color="#9d294d">❤️ แดง</button><button data-color="#e2a83d">💛 ทอง</button><button data-color="#23836d">💚 เขียว</button></div>
-<div class="feature-actions"><button class="secondary" id="closeCharacter">ยกเลิก</button><button class="primary" id="createAvatar">สร้างตัวละคร</button></div></div></div>
-<div class="feature-modal" id="diyModal"><div class="feature-card"><h2>🏮 ร้านกระทง KKN</h2><p>เลือกฐานกระทงและวัสดุตกแต่ง จากนั้นกด “นำไปใช้” แล้วแตะผิวน้ำเพื่อปล่อยกระทง</p>
-<div class="preview-row"><div class="avatar-preview" id="diyPreview">🪷</div><div><b id="diyName">กระทงใบตองดอกบัว</b><div style="font-size:11px;color:#c8d0df">ตัวอย่างรูปแบบกระทง</div></div></div>
-<label>ฐานกระทง</label><select id="diyBase"><option value="leaf">ฐานใบตอง</option><option value="bread">ฐานขนมปัง</option><option value="lotus">ฐานกลีบดอกบัว</option><option value="coconut">ฐานกาบมะพร้าว</option></select>
-<label>วัสดุตกแต่ง</label><div class="feature-grid" id="diyMaterials"><button class="active" data-mat="banana">🌿 ใบตอง</button><button class="active" data-mat="flower">🌸 ดอกไม้สด</button><button data-mat="marigold">🌼 ดาวเรือง</button><button data-mat="orchid">🌺 กล้วยไม้</button><button class="active" data-mat="candle">🕯️ เทียน</button><button data-mat="incense">〰️ ธูป</button><button data-mat="ribbon">🎀 ริบบิ้น</button><button data-mat="coin">✨ ของตกแต่ง</button></div>
-<div class="feature-actions"><button class="secondary" id="closeDIY">ปิด</button><button class="primary" id="applyDIY">นำกระทงนี้ไปใช้</button></div></div></div>
-
-<div class="feature-modal" id="friendShopModal">
- <div class="feature-card">
-  <h2>💗 ร้านเช่าเพื่อนลอยกระทง</h2>
-  <p>เลือกเพื่อนร่วมเดินเที่ยว ทำกระทงคู่ ถ่ายภาพ และร่วมอธิษฐานในคืนวันเพ็ญ</p>
-  <div class="preview-row"><div class="avatar-preview" id="friendPreview">🧑🏻</div><div><b id="friendNamePreview">เพื่อนร่วมเทศกาล</b><div style="font-size:11px;color:#c8d0df" id="friendDesc">เพื่อน NPC จะเดินเที่ยวอยู่ข้างตัวละครของคุณ</div></div></div>
-  <label>เลือกเพื่อนร่วมงาน</label>
-  <div class="feature-grid" id="friendOptions">
-   <button class="active" data-friend="kind">🌸 ใจดี อ่อนโยน</button>
-   <button data-friend="cheer">🎉 ร่าเริง สนุกสนาน</button>
-   <button data-friend="calm">🌙 สุขุม โรแมนติก</button>
-   <button data-friend="cool">✨ สดใส เป็นกันเอง</button>
-  </div>
-  <label for="friendNick">ตั้งชื่อเพื่อน (ไม่บังคับ)</label>
-  <input id="friendNick" maxlength="18" placeholder="เช่น เพื่อนคืนวันเพ็ญ">
-  <div class="feature-actions"><button class="secondary" id="closeFriendShop">กลับงานเทศกาล</button><button class="primary" id="rentFriend">เช่าเพื่อนร่วมงาน</button></div>
-  <div id="friendActions" class="hidden">
-   <label>กิจกรรมร่วมกัน</label>
-   <div class="feature-grid">
-    <button id="couplePhoto">📸 ถ่ายภาพคู่</button>
-    <button id="coupleWish">🪷 อธิษฐานร่วมกัน</button>
-    <button id="coupleFirework">💗 จุดพลุหัวใจ</button>
-    <button id="endFriend">👋 ส่งเพื่อนกลับ</button>
-   </div>
-  </div>
-  <div class="hint">เพื่อนเช่าเป็นตัวละคร NPC ภายในเกม ไม่ใช่ผู้เล่นจริง ระบบชวนเพื่อนจริงจะพัฒนาเป็น Multiplayer ในขั้นต่อไป</div>
- </div>
-</div>
-<div id="fireworkModal">
- <div class="fw-dialog">
-  <h2>🎆 ร้านพลุอธิษฐาน</h2>
-  <p>เขียนข้อความหรือเลือก Emoji แล้วส่งประกายความสุขขึ้นสู่ท้องฟ้า</p>
-  <label class="fw-label" for="fwText">ข้อความบนท้องฟ้า (ไม่เกิน 24 ตัวอักษร)</label>
-  <input id="fwText" maxlength="24" placeholder="เช่น ขอให้มีความสุขทุกคน">
-  <div class="fw-label">เลือกสัญลักษณ์</div>
-  <div class="fw-emojis" id="fwEmojis"></div>
-  <div class="fw-preview"><div><span id="fwPreviewEmoji">❤️</span><br><strong id="fwPreviewText">ขอให้สมปรารถนา</strong></div></div>
-  <div class="fw-buttons">
-   <button class="secondary" id="closeFireworks">กลับตลาด</button>
-   <button class="primary" id="launchFireworks">🎇 ซื้อและจุดพลุ</button>
-  </div>
-  <div class="hint">พลุจะแสดงเป็นประกายข้อความบนท้องฟ้า พร้อมแสงสะท้อนเหนือบึง</div>
- </div>
-</div>
-
-<div id="movePad" aria-label="แป้นควบคุมเดิน"><div id="moveKnob"></div></div>
-<div id="toast"></div>
+<div id="scene"></div>
+<header class="top"><div class="logo" id="logoTop">KKN</div><div class="brand"><b>KKN LOY KRATHONG 3D</b><small>KHAMKAENNAKORN SCHOOL</small></div><div class="year">คืนวันเพ็ญ · ๒๕๖๙</div></header>
+<div class="hero"><strong>คืนแห่งแสงประทีป</strong><span>สืบสานประเพณีไทย ร่วมอธิษฐานใต้แสงจันทร์</span></div>
+<div id="count">🪷 กระทงที่ปล่อย <b id="nKrathong">0</b></div>
+<div class="bottom"><div class="actions">
+<button class="action primary" id="openKrathong"><span class="ico">🪷</span>สร้างกระทง<small>เลือกวัสดุและคำอธิษฐาน</small></button>
+<button class="action" id="openFirework"><span class="ico">🎆</span>สร้างพลุ<small>เลือกสีและจุดขึ้นฟ้า</small></button>
+<button class="action" id="openLantern"><span class="ico">🏮</span>ปล่อยโคม<small>เขียนคำอธิษฐานแล้วปล่อย</small></button>
+</div><div class="tip">แตะผิวน้ำเพื่อเลือกตำแหน่งปล่อยกระทง · ใช้ได้ทั้งมือถือและคอมพิวเตอร์</div></div>
+<div id="intro"><div class="introCard"><div class="introLogo" id="logoIntro">KKN</div><div class="kicker">KHAMKAENNAKORN SCHOOL PRESENTS</div><h1>KKN LOY KRATHONG 3D</h1><div class="thai">ลอยประทีป อธิษฐานริมสายน้ำ</div><p>สัมผัสค่ำคืนเทศกาลลอยกระทงริมบึงน้ำ ชมแสงเทียนระยิบระยับ จุดพลุเหนือท้องฟ้า และปล่อยโคมลอยสู่คืนวันเพ็ญ</p><button class="primaryBtn" id="enter">เข้าสู่เทศกาล</button></div></div>
+<div id="modal"><div class="card" id="card"></div></div><div id="toast"></div>
 <script type="module">
 import * as THREE from 'three';
-
-const container=document.querySelector('#game');
-const scene=new THREE.Scene();
-scene.background=new THREE.Color(0x18243a);
-scene.fog=new THREE.FogExp2(0x18243a,0.009);
-const camera=new THREE.PerspectiveCamera(43,innerWidth/innerHeight,.1,250);
-camera.position.set(0,13,24);
-const renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:'high-performance'});
-renderer.setPixelRatio(Math.min(devicePixelRatio,1.7));
-renderer.setSize(innerWidth,innerHeight);
-renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
-renderer.outputColorSpace=THREE.SRGBColorSpace;
-renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.34;
-container.appendChild(renderer.domElement);
-
-scene.add(new THREE.HemisphereLight(0xb7d4ff,0x4b2d23,1.35));
-const moon=new THREE.DirectionalLight(0xffe4b5,2.0);moon.position.set(-9,18,8);moon.castShadow=true;moon.shadow.mapSize.set(1024,1024);scene.add(moon);
-const warm=new THREE.PointLight(0xffa65d,62,42);warm.position.set(0,7,-4);scene.add(warm);
-
-const mat=(color,roughness=.75,metalness=0)=>new THREE.MeshStandardMaterial({color,roughness,metalness});
-const wood=mat(0x70442c),woodLight=mat(0xa96c42),pink=mat(0xe77ba8),cream=mat(0xffe6c4),gold=mat(0xe7b85e,.4,.35),leaf=mat(0x244d36),leaf2=mat(0x42754a),dark=mat(0x172338);
-function box(parent,w,h,d,material,x,y,z){const m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),material);m.position.set(x,y,z);m.castShadow=true;m.receiveShadow=true;parent.add(m);return m}
-function cylinder(parent,r1,r2,h,material,x,y,z,seg=12){const m=new THREE.Mesh(new THREE.CylinderGeometry(r1,r2,h,seg),material);m.position.set(x,y,z);m.castShadow=true;m.receiveShadow=true;parent.add(m);return m}
-function sphere(parent,r,material,x,y,z,sx=1,sy=1,sz=1){const m=new THREE.Mesh(new THREE.SphereGeometry(r,12,10),material);m.position.set(x,y,z);m.scale.set(sx,sy,sz);m.castShadow=true;parent.add(m);return m}
-
-// Distant night sky with soft moon and stars.
-const moonDisc=new THREE.Mesh(new THREE.SphereGeometry(1.05,24,16),new THREE.MeshBasicMaterial({color:0xffe9bc}));moonDisc.position.set(-13,15,-31);scene.add(moonDisc);
-for(let i=0;i<90;i++){const s=new THREE.Mesh(new THREE.SphereGeometry(.035+Math.random()*.035,6,6),new THREE.MeshBasicMaterial({color:0xffe8c1}));s.position.set((Math.random()-.5)*75,8+Math.random()*20,-25-Math.random()*30);scene.add(s)}
-
-// Ground and large animated water basin.
-const ground=box(scene,62,.5,58,mat(0x382a28),0,-.48,-8);
-const waterGeo=new THREE.PlaneGeometry(44,35,120,100);
-const waterMat=new THREE.MeshPhysicalMaterial({color:0x102e3c,roughness:.23,metalness:.32,clearcoat:1,clearcoatRoughness:.15});
-const water=new THREE.Mesh(waterGeo,waterMat);water.rotation.x=-Math.PI/2;water.position.set(0,.02,-9);water.receiveShadow=true;scene.add(water);
-const waterPositions=waterGeo.attributes.position;
-const baseWater=waterPositions.array.slice();
-const waterEdge=box(scene,46,.35,1.2,woodLight,0,-.1,8.7);
-box(scene,46,.35,1.2,woodLight,0,-.1,-26.7);
-box(scene,1.2,.35,36,woodLight,-22.4,-.1,-9);
-box(scene,1.2,.35,36,woodLight,22.4,-.1,-9);
-
-// Tiled promenade foreground.
-const tileMat=mat(0x9b5839),tileDark=mat(0x633b30);
-box(scene,50,.24,9,tileMat,0,-.05,14.8);
-for(let x=-24;x<=24;x+=2.5)box(scene,.045,.012,8.7,tileDark,x,.08,14.8);
-for(let z=11;z<19;z+=2)box(scene,49,.012,.045,tileDark,0,.08,z);
-
-// Market stall, set along far bank.
-const stall=new THREE.Group();stall.position.set(0,0,-22.5);scene.add(stall);
-box(stall,14,.35,4.4,woodLight,0,1.3,0);
-box(stall,14,.12,4.5,cream,0,1.52,0);
-for(const x of [-6.5,6.5])for(const z of [-1.6,1.6])cylinder(stall,.14,.18,4.1,wood, x,3.45,z,10);
-box(stall,14,.22,4.5,pink,0,5.45,0);
-const roof=new THREE.Group();stall.add(roof);
-box(roof,14,.18,4.6,cream,0,5.6,0);
-for(let i=0;i<14;i++){const x=-6.5+i;box(roof,.48,.08,4.55,i%2?pink:cream,x,5.72,0)}
-// Scalloped awning valance.
-for(let i=0;i<17;i++){const x=-6.5+i*.81;const m=new THREE.Mesh(new THREE.SphereGeometry(.42,12,10),i%2?pink:cream);m.scale.set(1,.55,.28);m.position.set(x,5.15,2.05);stall.add(m)}
-// Counter display and lantern strings.
-for(let i=0;i<9;i++){const x=-5.5+i*1.38;const lamp=new THREE.PointLight(i%2?0xffc66e:0xff8bb9,7,5);lamp.position.set(x,4.65,2.5);stall.add(lamp);sphere(stall,.12,mat(i%2?0xffd27b:0xff9fc8,.35),x,4.65,2.5)}
-// Sign.
-box(stall,5,.9,.15,gold,0,6.25,-2.15);
-const signCanvas=document.createElement('canvas');signCanvas.width=1024;signCanvas.height=180;const ctx=signCanvas.getContext('2d');ctx.fillStyle='#f8e9c9';ctx.fillRect(0,0,1024,180);ctx.fillStyle='#a83e69';ctx.font='bold 76px sans-serif';ctx.textAlign='center';ctx.fillText('ตลาดขามแก่น · KKN',512,116);
-const signTex=new THREE.CanvasTexture(signCanvas);const sign=new THREE.Mesh(new THREE.PlaneGeometry(4.8,.82),new THREE.MeshBasicMaterial({map:signTex}));sign.position.set(0,6.25,-2.05);stall.add(sign);
-
-// Flowers and sample krathongs on the counter.
-function flower(parent,x,y,z,color){const g=new THREE.Group();g.position.set(x,y,z);parent.add(g);cylinder(g,.38,.48,.14,mat(0x3e5535),0,0,0,16);for(let j=0;j<8;j++){const a=j*Math.PI/4;const p=sphere(g,.22,mat(color),Math.cos(a)*.25,.16,Math.sin(a)*.25,.7,.45,1.4);p.rotation.y=-a}cylinder(g,.12,.12,.22,gold,0,.22,0,12)}
-for(let i=0;i<5;i++)flower(stall,-5+i*2.5,1.75,.25,[0xd95c83,0xf0a4b8,0xe9bd68][i%3]);
-
-// Trees, planters and foliage along walkway.
-function tree(x,z,scale=1){const g=new THREE.Group();g.position.set(x,0,z);g.scale.setScalar(scale);scene.add(g);cylinder(g,.35,.5,3.2,wood,x*0,1.6,0,10);for(let i=0;i<20;i++){const a=i*2.4,r=.8+Math.random()*1.1;const y=2.7+Math.random()*2.2;sphere(g,.8,i%3?leaf:leaf2,Math.cos(a)*r,y,Math.sin(a)*r,1.1,.9,1.1)}cylinder(g,1.2,1.35,.45,mat(0x6a4939),0,.25,0,16)}
-tree(-16,5,1.25);tree(16,5,1.2);tree(-17,-14,.95);tree(17,-14,.95);
-for(let i=0;i<12;i++){const x=-19+i*3.45;const l=sphere(scene,.55,leaf,x,.9,7.5,1.6,.8,1);l.rotation.y=i*.5}
-
-// Small warm lanterns on posts.
-for(let i=0;i<10;i++){const x=-20+i*4.4;const z=6.8;cylinder(scene,.07,.09,2.5,wood,x,1.25,z,8);box(scene,.55,.65,.55,mat(0xc85f63),x,2.75,z);const glow=new THREE.PointLight(0xffb66a,5,6);glow.position.set(x,2.9,z);scene.add(glow)}
-
-// Distant buildings silhouetted across the water.
-for(let i=0;i<13;i++){const x=-24+i*4;const h=2+Math.random()*4;box(scene,2.7,h,1.6,mat(i%2?0x1d2a3a:0x293143),x,h/2,-29);for(let j=0;j<3;j++){const w=sphere(scene,.07,gold,x-0.65+j*.65,h*.55,-28.1,.7,1,.4)}}
-
-// Festival crowd: low-poly visitors with simple walking cycles along the promenade.
-const crowd=[];
-const skinMats=[mat(0xd99b75),mat(0xf0bd96),mat(0xb97856)];
-const clothColors=[0x244a83,0x9d294d,0xe2a83d,0x23836d,0xeee1c9,0x684b91,0xd56b38];
-function makePerson(x,z,scale=1,phase=0){
- const g=new THREE.Group();g.position.set(x,0,z);g.scale.setScalar(scale);
- const skin=skinMats[Math.floor(Math.random()*skinMats.length)],shirt=mat(clothColors[Math.floor(Math.random()*clothColors.length)]),pants=mat([0x273247,0x473b35,0x182b32][Math.floor(Math.random()*3)]);
- cylinder(g,.16,.2,.65,shirt,0,1.05,0,9);sphere(g,.19,skin,0,1.55,0,.9,1.05,.9);
- cylinder(g,.07,.085,.62,pants,-.09,.39,0,7).rotation.z=.04;cylinder(g,.07,.085,.62,pants,.09,.39,0,7).rotation.z=-.04;
- cylinder(g,.055,.065,.56,skin,-.22,1.05,0,7).rotation.z=-.18;cylinder(g,.055,.065,.56,skin,.22,1.05,0,7).rotation.z=.18;
- sphere(g,.2,mat(0x171923),0,1.7,-.015,.95,.35,.95);
- scene.add(g);crowd.push({g,phase,speed:.6+Math.random()*.7,originX:x,originZ:z,range:1.2+Math.random()*2.2});return g;
-}
-for(let i=0;i<42;i++){const side=i%2?1:-1;const x=side*(8+Math.random()*12);const z=8+Math.random()*10;makePerson(x,z,.72+Math.random()*.22,Math.random()*6.28)}
-for(let i=0;i<16;i++){makePerson(-18+Math.random()*36,-18+Math.random()*3,.68+Math.random()*.2,Math.random()*6.28)}
-// Festival strings of warm bulbs over the market walkway.
-for(let row=0;row<3;row++){for(let i=0;i<18;i++){const x=-20+i*2.35,z=3-row*3,y=8+Math.sin(i*.48+row)*.65;const bulb=sphere(scene,.085,mat(0xffd58a,.25),x,y,z);const glow=new THREE.PointLight(0xffb968,1.3,3);glow.position.copy(bulb.position);scene.add(glow)}}
-// Stage with glowing sign and festive spotlights.
-const stage= new THREE.Group();stage.position.set(-17,0,-20);scene.add(stage);box(stage,8,.55,3.2,woodLight,0,.35,0);box(stage,8,.2,.25,gold,0,2.7,-1.35);
-const stageCanvas=document.createElement('canvas');stageCanvas.width=1024;stageCanvas.height=220;const stx=stageCanvas.getContext('2d');stx.fillStyle='#fff0c9';stx.font='bold 100px Kanit, sans-serif';stx.textAlign='center';stx.fillText('KKN FESTIVAL',512,145);const stTex=new THREE.CanvasTexture(stageCanvas);const stageSign=new THREE.Mesh(new THREE.PlaneGeometry(7.5,1.6),new THREE.MeshBasicMaterial({map:stTex,transparent:true}));stageSign.position.set(0,2.7,-1.18);stage.add(stageSign);
-for(let i=0;i<4;i++){const spot=new THREE.SpotLight(i%2?0xff78bd:0x75cfff,18,18,Math.PI/7,.5,1.2);spot.position.set(-3+i*2,6,2);spot.target.position.set(-3+i*2,0,-2);stage.add(spot,spot.target)}
-
-
-// Grand Thai temple backdrop: golden chedi, ordination hall and illuminated roofs.
-const templeGold=mat(0xd7ad58,.38,.35), templeIvory=mat(0xe8d8b9,.72), templeRed=mat(0x8f3d3d), templeRoof=mat(0x263d58,.5,.15);
-function makeChedi(x,z,scale=1){
- const g=new THREE.Group();g.position.set(x,0,z);g.scale.setScalar(scale);scene.add(g);
- cylinder(g,3.5,4.1,.7,templeIvory,0,.35,0,32);
- cylinder(g,2.8,3.35,1.1,templeGold,0,1.15,0,32);
- // Bell-shaped stupa body built from stacked tapering tiers.
- const body=new THREE.Mesh(new THREE.SphereGeometry(2.25,32,24,0,Math.PI*2,0,Math.PI*.78),templeGold);body.scale.set(1,1.12,1);body.position.y=2.15;g.add(body);
- cylinder(g,1.5,2.15,.55,templeIvory,0,2.25,0,32);
- for(let i=0;i<7;i++)cylinder(g,.13+(6-i)*.075,.2+(6-i)*.075,.32,templeGold,0,4.15+i*.31,0,20);
- const spire=new THREE.Mesh(new THREE.ConeGeometry(.22,2.5,16),templeGold);spire.position.y=6.65;g.add(spire);
- const finial=new THREE.PointLight(0xffd77b,7,15);finial.position.set(0,6.8,0);g.add(finial);
- // subtle gold bands around the bell
- for(let y of [1.55,2.0,3.0,3.55]){const ring=new THREE.Mesh(new THREE.TorusGeometry(y>3?1.65:2.05,.055,8,48),templeIvory);ring.rotation.x=Math.PI/2;ring.position.y=y;g.add(ring)}
- return g;
-}
-function makeOrdinationHall(x,z,scale=1){
- const g=new THREE.Group();g.position.set(x,0,z);g.scale.setScalar(scale);scene.add(g);
- box(g,12,3.1,7,templeIvory,0,1.65,0);
- box(g,12.5,.28,7.5,templeGold,0,3.2,0);
- // layered steep Thai roof planes
- for(let level=0;level<3;level++){
-  const w=13-level*1.35, y=3.55+level*.8, d=8-level*.75;
-  const roofMesh=new THREE.Mesh(new THREE.ConeGeometry(w*.62,1.35,4),templeRoof);
-  roofMesh.rotation.y=Math.PI/4;roofMesh.scale.z=d/(w*.62);roofMesh.position.set(0,y,0);g.add(roofMesh);
-  box(g,w,.12,.12,templeGold,0,y-.58,d*.46);
- }
- for(let xx of [-4.7,-2.35,0,2.35,4.7]){
-  cylinder(g,.12,.16,2.8,templeGold,xx,1.75,3.15,12);
-  const cap=new THREE.Mesh(new THREE.ConeGeometry(.19,.48,8),templeGold);cap.position.set(xx,3.25,3.15);g.add(cap);
- }
- // broad stairs and illuminated entrance
- box(g,4,.35,1.4,templeIvory,0,.25,4.1);
- box(g,2.2,2.2,.12,templeRed,0,1.45,3.56);
- const doorGlow=new THREE.PointLight(0xffb75e,13,18);doorGlow.position.set(0,2.1,4.3);g.add(doorGlow);
- return g;
-}
-makeChedi(-13,-37,1.65);
-makeChedi(15,-39,1.25);
-makeOrdinationHall(1,-38,1.05);
-// Temple courtyard lamps and small decorative chedi silhouettes.
-for(let side of [-1,1])for(let i=0;i<5;i++){
- const x=side*(8+i*2.3),z=-31-Math.sin(i*.6)*1.2;
- cylinder(scene,.07,.09,2.3,templeGold,x,1.15,z,8);
- const lantern=box(scene,.42,.55,.42,mat(0xd47c54),x,2.45,z);
- const lamp=new THREE.PointLight(0xffbd69,3.8,7);lamp.position.set(x,2.5,z);scene.add(lamp);
-}
-// Floating festival lanterns suspended above the temple-side walkway.
-const skyLanterns=[];
-for(let i=0;i<24;i++){
- const g=new THREE.Group();g.position.set(-22+Math.random()*44,8+Math.random()*7,-28+Math.random()*22);scene.add(g);
- const body=new THREE.Mesh(new THREE.SphereGeometry(.38,12,10),mat(i%3===0?0xd65b73:i%3===1?0xe5a94e:0x79a9a4,.5));body.scale.set(.78,1.15,.78);g.add(body);
- const cap= new THREE.Mesh(new THREE.ConeGeometry(.28,.32,10),templeGold);cap.position.y=.43;g.add(cap);
- const glow=new THREE.PointLight(0xffb66b,2.4,5);glow.position.y=-.1;g.add(glow);
- skyLanterns.push({g,baseY:g.position.y,phase:Math.random()*6,speed:.3+Math.random()*.3});
-}
-
-
-// Krathong construction.
-const flowerColors={leaf:0x74a84e,lotus:0xd95e91,bread:0xc78b48};
-function makeKrathong(type,custom={}){
- const g=new THREE.Group();const base=mat(custom.baseColor||(type==='bread'?0xc58a4a:type==='lotus'?0x477d53:type==='coconut'?0x79513a:0x8d653d));
- const rim=mat(type==='lotus'?0x65a879:type==='bread'?0xe6b86b:type==='coconut'?0xb48a58:0xb5a05a);
- const bowl=new THREE.Mesh(new THREE.CylinderGeometry(.48,.24,.18,32,1,true),base);bowl.position.y=.08;g.add(bowl);
- const disk=new THREE.Mesh(new THREE.CircleGeometry(.48,32),rim);disk.rotation.x=-Math.PI/2;disk.position.y=.17;g.add(disk);
- const chosen=custom.materials||['banana','flower','candle'];
- if(chosen.includes('banana')||chosen.includes('flower')||chosen.includes('marigold')||chosen.includes('orchid')){
-  for(let j=0;j<12;j++){const a=j*Math.PI/6;let flowerColor=custom.flowerColor||(type==='bread'?0xe8c078:type==='lotus'?(j%2?0xf4b6cf:0xe978a4):(j%2?0x9ac56e:0x4e8e4b));if(chosen.includes('marigold')&&j%3===0)flowerColor=0xffa51f;if(chosen.includes('orchid')&&j%3===1)flowerColor=0xc58ad9;const petal=new THREE.Mesh(new THREE.SphereGeometry(.18,12,8),mat(flowerColor));petal.scale.set(.8,.22,1.6);petal.position.set(Math.cos(a)*.31,.23,Math.sin(a)*.31);petal.rotation.y=-a;g.add(petal)}
- }
- if(chosen.includes('coin')){for(let j=0;j<6;j++){const a=j*Math.PI/3;cylinder(g,.055,.055,.025,gold,Math.cos(a)*.27,.27,Math.sin(a)*.27,12)}}
- if(chosen.includes('candle')){cylinder(g,.055,.065,.28,mat(0xffe6a1),0,.38,0,8);}
- const flame=new THREE.Mesh(new THREE.SphereGeometry(.075,10,8),new THREE.MeshBasicMaterial({color:0xffb33f}));flame.scale.set(.65,1.8,.65);flame.position.set(0,.58,0);g.add(flame);
- const light=new THREE.PointLight(0xffad4f,2.5,3);light.position.set(0,.65,0);g.add(light);
- if(custom.materials?.includes('incense')){cylinder(g,.012,.012,.38,mat(0x5a4539),.13,.48,0,6);sphere(g,.035,mat(0xff8b45),.13,.69,0)}
- if(custom.materials?.includes('ribbon')){const ribbon=new THREE.Mesh(new THREE.TorusGeometry(.4,.025,6,32),mat(0xd94d91));ribbon.rotation.x=Math.PI/2;ribbon.position.y=.22;g.add(ribbon)}
- g.userData={type,flame,light,phase:Math.random()*6};return g;
-}
-// Three physical-looking sample krathongs displayed at the market stall.
-[['leaf',-4.6],['lotus',0],['bread',4.6]].forEach(([kind,x])=>{const sample=makeKrathong(kind);sample.scale.setScalar(1.45);sample.position.set(x,1.9,-21.55);sample.rotation.x=-.08;scene.add(sample)});
-const raycaster=new THREE.Raycaster(),pointer=new THREE.Vector2();let selected='leaf',holding=false,placing=false,pendingPoint=null,krathongs=[],clock=new THREE.Clock();
-const waterPlane=new THREE.Plane(new THREE.Vector3(0,1,0),-.08);
-function showToast(t){const el=document.querySelector('#toast');el.textContent=t;el.style.opacity=1;el.style.transform='translate(-50%,0)';clearTimeout(showToast.t);showToast.t=setTimeout(()=>{el.style.opacity=0;el.style.transform='translate(-50%,-10px)'},2300)}
-function pickWater(ev){const rect=renderer.domElement.getBoundingClientRect();pointer.x=((ev.clientX-rect.left)/rect.width)*2-1;pointer.y=-((ev.clientY-rect.top)/rect.height)*2+1;raycaster.setFromCamera(pointer,camera);const p=new THREE.Vector3();if(raycaster.ray.intersectPlane(waterPlane,p)){if(p.x>-20.5&&p.x<20.5&&p.z>-25&&p.z<7){return p}}return null}
-renderer.domElement.addEventListener('pointerdown',e=>{if(!placing)return;const p=pickWater(e);if(p){pendingPoint=p;document.querySelector('#prayer').style.display='flex';document.querySelector('#wish').focus({preventScroll:true})}});
-document.querySelectorAll('.choice').forEach(b=>b.addEventListener('click',()=>{selected=b.dataset.type;document.querySelectorAll('.choice').forEach(x=>x.classList.toggle('active',x===b));if(holding)showToast('เปลี่ยนแบบกระทงแล้ว 🪷')}));
-let mustCreateCharacter=true;
-document.querySelector('#start').onclick=()=>{characterModal.style.display='flex';document.querySelector('#closeCharacter').style.display='none';showToast('สร้างตัวละครก่อนเข้าสู่เทศกาลนะครับ')};
-function enterFestival(){document.querySelector('#intro').classList.add('hidden');document.querySelector('#panel').classList.remove('hidden');document.querySelector('#closeCharacter').style.display='';mustCreateCharacter=false;showToast('ยินดีต้อนรับสู่เทศกาลลอยกระทง KKN ✨')}
-
-document.querySelector('#receive').onclick=()=>{holding=true;placing=true;document.querySelector('#instructions').textContent='แตะบนผิวน้ำเพื่อเลือกจุดปล่อยกระทง';showToast('คุณได้รับกระทงแล้ว เลือกจุดบนผิวน้ำได้เลย')};
-document.querySelector('#cancelWish').onclick=()=>{document.querySelector('#prayer').style.display='none';pendingPoint=null};
-document.querySelector('#placeWish').onclick=()=>{
- if(!pendingPoint){showToast('แตะเลือกตำแหน่งบนผิวน้ำก่อนนะ');return}
- const diyColor=({leaf:0x8d653d,bread:0xc58a4a,lotus:0x477d53,coconut:0x79513a})[selected]||0x8d653d;const g=makeKrathong(selected,{baseColor:diyColor,materials:[...diyMaterials]});g.position.copy(pendingPoint);g.position.y=.12;g.rotation.y=Math.random()*Math.PI*2;scene.add(g);
- const wish=document.querySelector('#wish').value.trim();g.userData.wish=wish;g.userData.drift=(Math.random()-.5)*.012;g.userData.driftZ=(Math.random()-.5)*.009;g.userData.startX=g.position.x;g.userData.startZ=g.position.z;krathongs.push(g);
- document.querySelector('#count').textContent=krathongs.length;document.querySelector('#wish').value='';
- document.querySelector('#prayer').style.display='none';pendingPoint=null;placing=false;holding=false;
- document.querySelector('#instructions').textContent='กระทงของคุณกำลังลอยไปกับสายน้ำ ✨';
- showToast('ปล่อยกระทงเรียบร้อย ขอให้สมปรารถนา ✨');
-};
-document.querySelector('#reset').onclick=()=>{krathongs.forEach(k=>scene.remove(k));krathongs=[];document.querySelector('#count').textContent='0';holding=false;placing=false;showToast('เริ่มต้นใหม่แล้ว')};
-// Character customization and DIY state.
-let avatarKind='boy',avatarColor='#244a83',avatarHair='short',player=null;
-const characterModal=document.querySelector('#characterModal'),diyModal=document.querySelector('#diyModal');
-document.querySelector('#openCharacter').onclick=()=>characterModal.style.display='flex';document.querySelector('#closeCharacter').onclick=()=>{if(mustCreateCharacter){showToast('ต้องสร้างตัวละครก่อนเริ่มเล่น');return}characterModal.style.display='none'};
-document.querySelector('#avatarKinds').addEventListener('click',e=>{const b=e.target.closest('button[data-kind]');if(!b)return;avatarKind=b.dataset.kind;document.querySelectorAll('#avatarKinds button').forEach(x=>x.classList.toggle('active',x===b));document.querySelector('#avatarPreview').textContent=({boy:'👦🏻',girl:'👧🏻',adult:'🧑🏻',fantasy:'🧚🏻'})[avatarKind];document.querySelector('#avatarName').textContent=b.textContent.trim()});
-document.querySelector('#outfitColors').addEventListener('click',e=>{const b=e.target.closest('button[data-color]');if(!b)return;avatarColor=b.dataset.color;document.querySelectorAll('#outfitColors button').forEach(x=>x.classList.toggle('active',x===b))});
-document.querySelector('#hairStyle').onchange=e=>avatarHair=e.target.value;
-function createPlayer(){if(player)scene.remove(player);player=new THREE.Group();const skin=mat(0xe5b08b),shirt=mat(avatarColor),pants=mat(0x253149),hair=mat(0x171923);cylinder(player,.22,.27,.82,shirt,0,1.12,0,12);sphere(player,.24,skin,0,1.78,0,.9,1.05,.9);sphere(player,.25,hair,0,1.96,0,1,.45,1);if(avatarHair==='long'||avatarKind==='girl')sphere(player,.24,hair,0,1.65,-.12,.9,1.25,.75);if(avatarHair==='bun')sphere(player,.12,hair,0,2.12,-.02);cylinder(player,.09,.1,.72,pants,-.12,.42,0,8);cylinder(player,.09,.1,.72,pants,.12,.42,0,8);cylinder(player,.065,.075,.65,skin,-.3,1.13,0,8).rotation.z=-.2;cylinder(player,.065,.075,.65,skin,.3,1.13,0,8).rotation.z=.2;player.position.set(0,0,12);scene.add(player);document.body.classList.add('has-player');showToast('สร้างตัวละครแล้ว! ใช้แป้นเดินบนจอ หรือ WASD / ปุ่มลูกศร');characterModal.style.display='none';updateCamera();if(mustCreateCharacter)enterFestival()}
-
-document.querySelector('#createAvatar').onclick=createPlayer;
-
-// Rental companion (NPC) shop. The companion follows the player and joins festival activities.
-let companion=null, companionKind='kind', companionNick='เพื่อนร่วมเทศกาล', companionPhase=0;
-const friendModal=document.querySelector('#friendShopModal');
-const friendLooks={
- kind:{emoji:'🌸',shirt:0xd96f9d,skin:0xe7b18e,hair:0x241b25,desc:'ใจดี อ่อนโยน ชอบบรรยากาศสงบ'},
- cheer:{emoji:'🎉',shirt:0xe3a33b,skin:0xc98763,hair:0x211b1b,desc:'ร่าเริง ชอบเดินเที่ยวและชมพลุ'},
- calm:{emoji:'🌙',shirt:0x4f719e,skin:0xf0c39c,hair:0x30252a,desc:'สุขุม โรแมนติก ชอบชมแสงจันทร์'},
- cool:{emoji:'✨',shirt:0x3d927f,skin:0xd99a77,hair:0x171b27,desc:'สดใส เป็นกันเอง พร้อมทำกิจกรรม'}
-};
-document.querySelector('#openFriendShop').onclick=()=>{friendModal.style.display='flex';};
-document.querySelector('#closeFriendShop').onclick=()=>friendModal.style.display='none';
-document.querySelector('#friendOptions').addEventListener('click',e=>{
- const b=e.target.closest('button[data-friend]');if(!b)return;
- companionKind=b.dataset.friend;const look=friendLooks[companionKind];
- document.querySelectorAll('#friendOptions button').forEach(x=>x.classList.toggle('active',x===b));
- document.querySelector('#friendPreview').textContent=look.emoji;
- document.querySelector('#friendNamePreview').textContent=b.textContent.trim();
- document.querySelector('#friendDesc').textContent=look.desc;
-});
-function buildCompanion(){
- if(!player){showToast('สร้างตัวละครก่อน แล้วจึงเช่าเพื่อนได้');return}
- if(companion)scene.remove(companion);
- const look=friendLooks[companionKind],g=new THREE.Group();
- const skin=mat(look.skin),shirt=mat(look.shirt),pants=mat(0x29364a),hair=mat(look.hair);
- cylinder(g,.22,.27,.82,shirt,0,1.12,0,12);
- sphere(g,.24,skin,0,1.78,0,.9,1.05,.9);
- sphere(g,.25,hair,0,1.96,0,1,.45,1);
- sphere(g,.12,hair,0,1.62,-.16,.9,1.2,.75);
- cylinder(g,.09,.1,.72,pants,-.12,.42,0,8);
- cylinder(g,.09,.1,.72,pants,.12,.42,0,8);
- cylinder(g,.065,.075,.65,skin,-.3,1.13,0,8).rotation.z=-.2;
- cylinder(g,.065,.075,.65,skin,.3,1.13,0,8).rotation.z=.2;
- // small glowing flower badge
- sphere(g,.075,gold,.17,1.3,.19,.7,.7,.7);
- g.position.set(player.position.x+1.35,0,player.position.z+.8);
- scene.add(g);companion=g;companionPhase=Math.random()*6.28;
- companionNick=document.querySelector('#friendNick').value.trim()||'เพื่อนร่วมเทศกาล';
- document.querySelector('#friendActions').classList.remove('hidden');
- document.querySelector('#rentFriend').textContent='เปลี่ยนเพื่อน';
- document.querySelector('#friendNamePreview').textContent=companionNick;
- showToast('เช่า '+companionNick+' มาร่วมลอยกระทงแล้ว 💗');
-}
-document.querySelector('#rentFriend').onclick=buildCompanion;
-document.querySelector('#endFriend').onclick=()=>{
- if(companion){scene.remove(companion);companion=null}
- document.querySelector('#friendActions').classList.add('hidden');
- document.querySelector('#rentFriend').textContent='เช่าเพื่อนร่วมงาน';
- showToast('ส่งเพื่อนกลับเรียบร้อย');friendModal.style.display='none';
-};
-document.querySelector('#couplePhoto').onclick=()=>{
- if(!companion||!player)return;
- const mid=new THREE.Vector3().addVectors(player.position,companion.position).multiplyScalar(.5);
- camera.position.set(mid.x+5,mid.y+4,mid.z+7);camera.lookAt(mid.x,mid.y+1,mid.z);
- showToast('จัดมุมกล้องถ่ายภาพคู่แล้ว 📸 กดบันทึกภาพหน้าจอได้เลย');
-};
-document.querySelector('#coupleWish').onclick=()=>{
- if(!companion){showToast('กรุณาเช่าเพื่อนก่อน');return}
- document.querySelector('#friendShopModal').style.display='none';
- document.querySelector('#prayer').style.display='flex';
- document.querySelector('#wish').value='ขอให้เรามีความสุขและพบเจอสิ่งดี ๆ';
- showToast('เขียนคำอธิษฐานร่วมกัน แล้วเลือกจุดปล่อยกระทง');
-};
-document.querySelector('#coupleFirework').onclick=()=>{
- if(!companion){showToast('กรุณาเช่าเพื่อนก่อน');return}
- makeWishParticles('รักนะ', '❤️');
- showToast('จุดพลุหัวใจร่วมกันแล้ว 💗');
-};
-
-const diyMaterials=new Set(['banana','flower','candle']);let diyBase='leaf';
-document.querySelector('#openDIY').onclick=()=>{diyModal.style.display='flex';showToast('เลือกรูปแบบและวัสดุในร้านกระทงได้เลย 🪷')};document.querySelector('#closeDIY').onclick=()=>diyModal.style.display='none';
-document.querySelector('#diyBase').onchange=e=>{diyBase=e.target.value;document.querySelector('#diyPreview').textContent=({leaf:'🌿',bread:'🍞',lotus:'🪷',coconut:'🥥'})[diyBase];document.querySelector('#diyName').textContent=e.target.selectedOptions[0].text};
-document.querySelector('#diyMaterials').addEventListener('click',e=>{const b=e.target.closest('button[data-mat]');if(!b)return;const key=b.dataset.mat;if(diyMaterials.has(key))diyMaterials.delete(key);else diyMaterials.add(key);b.classList.toggle('active',diyMaterials.has(key))});
-document.querySelector('#applyDIY').onclick=()=>{selected=diyBase;holding=true;placing=true;document.querySelectorAll('.choice').forEach(x=>x.classList.toggle('active',x.dataset.type===selected));diyModal.style.display='none';document.querySelector('#instructions').textContent='แตะบนผิวน้ำเพื่อเลือกจุดปล่อยกระทง DIY';showToast('พร้อมลอยกระทง DIY ของคุณแล้ว 🪷')};
-// Keyboard + mobile virtual joystick movement.
-const keys={};addEventListener('keydown',e=>{keys[e.key.toLowerCase()]=true});addEventListener('keyup',e=>{keys[e.key.toLowerCase()]=false});
-let joy={x:0,y:0},joyPointer=null;
-const movePad=document.querySelector('#movePad'),moveKnob=document.querySelector('#moveKnob');
-function setJoystick(e){const r=movePad.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2;let x=(e.clientX-cx)/43,y=(e.clientY-cy)/43;const d=Math.hypot(x,y);if(d>1){x/=d;y/=d}joy={x,y};moveKnob.style.transform=`translate(${x*29}px,${y*29}px)`}
-movePad.addEventListener('pointerdown',e=>{joyPointer=e.pointerId;movePad.setPointerCapture(e.pointerId);setJoystick(e)});
-movePad.addEventListener('pointermove',e=>{if(e.pointerId===joyPointer)setJoystick(e)});
-function stopJoy(e){if(e.pointerId===joyPointer){joyPointer=null;joy={x:0,y:0};moveKnob.style.transform='translate(0,0)'}}
-movePad.addEventListener('pointerup',stopJoy);movePad.addEventListener('pointercancel',stopJoy);
-
-// Third-person follow camera: stays behind the player while preserving touch orbit.
-let drag=null,last=null,pinch=0,azimuth=0,polar=.95,camRadius=8.5;
-function updateCamera(){const target=player?new THREE.Vector3(player.position.x,1.15,player.position.z):new THREE.Vector3(0,1,-7);if(player){const yaw=player.rotation.y;camera.position.set(target.x+Math.sin(yaw+Math.PI)*camRadius*.72,target.y+4.2,target.z+Math.cos(yaw+Math.PI)*camRadius*.72);camera.lookAt(target.x,target.y+.25,target.z)}else{camera.position.set(target.x+Math.sin(azimuth)*Math.sin(polar)*28,target.y+Math.cos(polar)*28,target.z+Math.cos(azimuth)*Math.sin(polar)*28);camera.lookAt(target)}}
-renderer.domElement.addEventListener('pointerdown',e=>{if(placing||player)return;drag=e.pointerId;last={x:e.clientX,y:e.clientY};renderer.domElement.setPointerCapture(e.pointerId)});
-renderer.domElement.addEventListener('pointermove',e=>{if(drag!==e.pointerId||!last)return;const dx=e.clientX-last.x,dy=e.clientY-last.y;azimuth-=dx*.004;polar=THREE.MathUtils.clamp(polar+dy*.003,.45,1.28);last={x:e.clientX,y:e.clientY};updateCamera()});
-renderer.domElement.addEventListener('pointerup',e=>{if(drag===e.pointerId){drag=null;last=null}});
-renderer.domElement.addEventListener('wheel',e=>{camRadius=THREE.MathUtils.clamp(camRadius+e.deltaY*.018,18,42);updateCamera()},{passive:true});
-updateCamera();
-
-
-// Wish fireworks: launch a particle rocket, then form the selected text/emoji in the sky.
-const fwModal=document.querySelector('#fireworkModal');
-const fwText=document.querySelector('#fwText');
-const fwEmojiList=['❤️','⭐','🌸','🎉','😊','🪷','✨','🌈'];
-let fwEmoji='❤️', activeFireworks=[];
-const fwEmojiWrap=document.querySelector('#fwEmojis');
-fwEmojiList.forEach((em,i)=>{const b=document.createElement('button');b.className='fw-emoji'+(i===0?' active':'');b.type='button';b.textContent=em;b.onclick=()=>{fwEmoji=em;document.querySelectorAll('.fw-emoji').forEach(x=>x.classList.toggle('active',x===b));updateFwPreview()};fwEmojiWrap.appendChild(b)});
-function updateFwPreview(){document.querySelector('#fwPreviewEmoji').textContent=fwEmoji;document.querySelector('#fwPreviewText').textContent=fwText.value.trim()||'ขอให้สมปรารถนา'}
-fwText.addEventListener('input',updateFwPreview);
-document.querySelector('#openFireworks').onclick=()=>{fwModal.style.display='flex';updateFwPreview();showToast('ยินดีต้อนรับสู่ร้านพลุ เลือกข้อความแล้วจุดได้เลย 🎆')};
-document.querySelector('#closeFireworks').onclick=()=>fwModal.style.display='none';
-fwModal.addEventListener('click',e=>{if(e.target===fwModal)fwModal.style.display='none'});
-
-function makeWishParticles(message,emoji){
- const canvas=document.createElement('canvas');canvas.width=1800;canvas.height=600;
- const c=canvas.getContext('2d');c.clearRect(0,0,1800,600);
- c.textAlign='center';c.textBaseline='middle';
- c.shadowColor='#fff2a8';c.shadowBlur=16;
- c.font='bold 220px Kanit, sans-serif';c.fillStyle='#fff4c6';c.fillText(emoji,900,190);
- c.shadowBlur=10;c.font='700 116px Kanit, sans-serif';c.fillStyle='#ffffff';c.strokeStyle='#ffcf77';c.lineWidth=5;c.strokeText(message||'ขอให้สมปรารถนา',900,450,1660);c.fillText(message||'ขอให้สมปรารถนา',900,450,1660);
- const data=c.getImageData(0,0,1800,600).data, pts=[];
- // Sample visible pixels into a compact constellation of sparkling points.
- for(let y=24;y<580;y+=7)for(let x=16;x<1790;x+=7){const a=data[(y*1800+x)*4+3];if(a>100)pts.push([x,y])}
- const max=2800,step=Math.max(1,Math.ceil(pts.length/max));
- const chosen=pts.filter((_,i)=>i%step===0);
- const count=chosen.length,positions=new Float32Array(count*3),colors=new Float32Array(count*3),vel=new Float32Array(count*3),targets=new Float32Array(count*3);
- const palette=[new THREE.Color(0xffd36b),new THREE.Color(0xff8fc7),new THREE.Color(0x9fe7ff),new THREE.Color(0xffffff)];
- const center=new THREE.Vector3((Math.random()-.5)*9,10+Math.random()*3,-9);
- for(let i=0;i<count;i++){
-  const [x,y]=chosen[i],tx=(x-900)/112,ty=(300-y)/112;
-  targets[i*3]=center.x+tx;targets[i*3+1]=center.y+ty;targets[i*3+2]=center.z;
-  const a=Math.random()*Math.PI*2,sp=1.5+Math.random()*4.5,up=(Math.random()-.5)*4;
-  vel[i*3]=Math.cos(a)*sp;vel[i*3+1]=Math.sin(a)*sp+up;vel[i*3+2]=(Math.random()-.5)*3;
-  positions[i*3]=center.x;positions[i*3+1]=2;positions[i*3+2]=center.z;
-  const col=palette[Math.floor(Math.random()*palette.length)];colors[i*3]=col.r;colors[i*3+1]=col.g;colors[i*3+2]=col.b;
- }
- const geo=new THREE.BufferGeometry();geo.setAttribute('position',new THREE.BufferAttribute(positions,3));geo.setAttribute('color',new THREE.BufferAttribute(colors,3));
- const material=new THREE.PointsMaterial({size:.105,vertexColors:true,transparent:true,opacity:1,depthWrite:false,blending:THREE.AdditiveBlending});
- const points=new THREE.Points(geo,material);scene.add(points);
- const rocketMat=new THREE.MeshBasicMaterial({color:0xffdf9a});const rocket=new THREE.Mesh(new THREE.SphereGeometry(.12,8,8),rocketMat);rocket.position.set(center.x,2,center.z);scene.add(rocket);
- const glow=new THREE.PointLight(0xffbd68,65,24);glow.position.copy(center);scene.add(glow);
- activeFireworks.push({points,geo,material,rocket,glow,vel,targets,center,start:clock.getElapsedTime(),duration:5.2});
- const launchSoundTime=clock.getElapsedTime();
- showToast('กำลังจุดพลุอธิษฐานของคุณ 🎆');
-}
-document.querySelector('#launchFireworks').onclick=async()=>{
- await (document.fonts?.ready||Promise.resolve());
- const message=fwText.value.trim().slice(0,24);
- if(!message&&!fwEmoji){showToast('พิมพ์ข้อความหรือเลือก Emoji ก่อนนะ');return}
- makeWishParticles(message,fwEmoji);fwModal.style.display='none';
-};
-
-
-function animate(){
- requestAnimationFrame(animate);const t=clock.getElapsedTime();
- // Crowd ambience: visitors stroll along the festival walkway.
- crowd.forEach((p,i)=>{p.g.position.x=p.originX+Math.sin(t*p.speed+p.phase)*p.range;p.g.position.z=p.originZ+Math.cos(t*p.speed*.7+p.phase)*.35;p.g.rotation.y=Math.sin(t*p.speed+p.phase)*.35});
- if(player){let sx=joy.x,sy=joy.y;if(keys['a']||keys['arrowleft'])sx-=1;if(keys['d']||keys['arrowright'])sx+=1;if(keys['w']||keys['arrowup'])sy-=1;if(keys['s']||keys['arrowdown'])sy+=1;const mag=Math.hypot(sx,sy);if(mag>.12){sx/=Math.max(1,mag);sy/=Math.max(1,mag);const speed=.105;player.position.x=THREE.MathUtils.clamp(player.position.x+sx*speed,-23,23);player.position.z=THREE.MathUtils.clamp(player.position.z+sy*speed,-25,19);player.rotation.y=Math.atan2(sx,sy);player.position.y=Math.abs(Math.sin(t*12))*.035;updateCamera()}else player.position.y=0}
- 
- // Rental friend walks beside the player with a gentle follow/idle animation.
- if(player&&companion){
-  const offsetX=Math.sin(player.rotation.y+Math.PI/2)*1.35;
-  const offsetZ=Math.cos(player.rotation.y+Math.PI/2)*1.35;
-  const tx=player.position.x+offsetX,tz=player.position.z+offsetZ;
-  companion.position.x+=(tx-companion.position.x)*.055;
-  companion.position.z+=(tz-companion.position.z)*.055;
-  companion.position.y=Math.abs(Math.sin(t*5+companionPhase))*.025;
-  companion.rotation.y=player.rotation.y+Math.sin(t*1.5+companionPhase)*.12;
- }
- 
-// Gentle vertex-based water waves, plus reflective moving highlights.
- for(let i=0;i<waterPositions.count;i++){const x=baseWater[i*3],y=baseWater[i*3+1];waterPositions.array[i*3+2]=Math.sin(x*.36+t*1.15)*.075+Math.cos(y*.42+t*.85)*.06+Math.sin((x+y)*.18+t*.55)*.045}
- waterPositions.needsUpdate=true;waterGeo.computeVertexNormals();
- krathongs.forEach((k,i)=>{const ph=k.userData.phase+t*.8;
-  // buoyancy, slow current drift and subtle rocking on the water surface
-  k.position.y=.12+Math.sin(ph)*.035+Math.sin(t*1.7+i)*.012;
-  k.position.x+=Math.sin(t*.11+i*1.7)*.00045+(k.userData.drift||0);
-  k.position.z+=Math.cos(t*.10+i*1.3)*.0004+(k.userData.driftZ||0);
-  k.rotation.y+=.0008+(k.userData.drift||0)*.05;
-  k.rotation.z=Math.sin(ph*.7)*.025;k.rotation.x=Math.cos(ph*.6)*.018;
-  k.userData.flame.scale.y=1.5+Math.sin(t*9+i)*.25;k.userData.light.intensity=2.1+Math.sin(t*8+i)*.35});
- skyLanterns.forEach((l,i)=>{l.g.position.y=l.baseY+Math.sin(t*l.speed+l.phase)*.28;l.g.position.x+=Math.sin(t*.12+l.phase)*.0008;l.g.rotation.z=Math.sin(t*.4+l.phase)*.035});
-
- // Firework rocket ascent and particle lettering formation.
- const now=clock.getElapsedTime();
- activeFireworks=activeFireworks.filter(f=>{
-  const age=now-f.start,flight=Math.min(1,age/.85),form=Math.max(0,Math.min(1,(age-.85)/1.25));
-  const p=f.geo.attributes.position.array;
-  for(let i=0;i<f.vel.length/3;i++){
-   const ix=i*3;
-   const burstX=f.center.x+f.vel[ix]*.38,burstY=f.center.y+f.vel[ix+1]*.38,burstZ=f.center.z+f.vel[ix+2]*.38;
-   const scatterX=burstX+f.vel[ix]*age*.16,scatterY=burstY+f.vel[ix+1]*age*.16-.18*age*age,scatterZ=burstZ+f.vel[ix+2]*age*.16;
-   p[ix]=scatterX+(f.targets[ix]-scatterX)*form;
-   p[ix+1]=scatterY+(f.targets[ix+1]-scatterY)*form;
-   p[ix+2]=scatterZ+(f.targets[ix+2]-scatterZ)*form;
-  }
-  f.geo.attributes.position.needsUpdate=true;
-  const fade=age<3.8?1:Math.max(0,1-(age-3.8)/1.4);
-  f.material.opacity=fade;
-  f.rocket.position.y=2+flight*(f.center.y-2);
-  f.rocket.visible=age<.85;
-  f.glow.intensity=age<1.1?65*(1-age/1.1):Math.max(0,18*fade);
-  if(age>f.duration){scene.remove(f.points);scene.remove(f.rocket);scene.remove(f.glow);f.geo.dispose();f.material.dispose();return false}
-  return true;
- });
-
- renderer.render(scene,camera);
-}
-animate();
-
-function resize(){camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setPixelRatio(Math.min(devicePixelRatio,1.7));renderer.setSize(innerWidth,innerHeight)}
-addEventListener('resize',resize);
-const logoPath=['./assets/kkn-logo.jpg','./assets/kkn-logo.png'].find(p=>p.endsWith('.jpg')?true:true);
-const logoFile=document.querySelector('#topLogo');const emblem=document.querySelector('#introLogo');
-const extLogo=('./assets/kkn-logo.jpg');
-fetch(extLogo).then(r=>{if(!r.ok)throw 0;return r.blob()}).then(blob=>{const url=URL.createObjectURL(blob);for(const el of [logoFile,emblem]){el.innerHTML='';const img=new Image();img.src=url;img.alt='ตราโรงเรียนขามแก่นนคร';el.appendChild(img)}}).catch(()=>fetch('./assets/kkn-logo.png').then(r=>{if(!r.ok)throw 0;return r.blob()}).then(blob=>{const url=URL.createObjectURL(blob);for(const el of [logoFile,emblem]){el.innerHTML='';const img=new Image();img.src=url;el.appendChild(img)}}).catch(()=>{}));
-</script>
-</body>
-</html>
+const $=s=>document.querySelector(s), sceneRoot=$('#scene');
+const scene=new THREE.Scene();scene.background=new THREE.Color(0x081326);scene.fog=new THREE.FogExp2(0x081326,.008);
+const camera=new THREE.PerspectiveCamera(48,innerWidth/innerHeight,.1,300);camera.position.set(0,18,31);camera.lookAt(0,3,-8);
+const renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:'high-performance'});renderer.setPixelRatio(Math.min(devicePixelRatio,1.7));renderer.setSize(innerWidth,innerHeight);renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.35;renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;sceneRoot.appendChild(renderer.domElement);
+scene.add(new THREE.HemisphereLight(0xaecbff,0x38251b,1.45));const moonLight=new THREE.DirectionalLight(0xffe4b5,2.4);moonLight.position.set(-12,24,10);moonLight.castShadow=true;moonLight.shadow.mapSize.set(1024,1024);scene.add(moonLight);
+const fill=new THREE.PointLight(0xffa65d,120,75);fill.position.set(0,13,-13);scene.add(fill);
+const mat=(c,r=.65,m=0)=>new THREE.MeshStandardMaterial({color:c,roughness:r,metalness:m});
+const gold=mat(0xd7a94f,.35,.5),darkGold=mat(0x87602c,.45,.3),leaf=mat(0x285b37,.85),leafLight=mat(0x568b4c,.8),pink=mat(0xe8a1b5,.55),white=mat(0xfff0d1,.35),wood=mat(0x50301f),red=mat(0x842f36),waterMat=new THREE.MeshStandardMaterial({color:0x102f49,roughness:.22,metalness:.5});
+function addMesh(g,m,x,y,z,parent=scene){const o=new THREE.Mesh(g,m);o.position.set(x,y,z);o.castShadow=true;o.receiveShadow=true;parent.add(o);return o}
+function box(w,h,d,m,x,y,z,parent=scene){return addMesh(new THREE.BoxGeometry(w,h,d),m,x,y,z,parent)}
+function cyl(rt,rb,h,m,x,y,z,seg=20,parent=scene){return addMesh(new THREE.CylinderGeometry(rt,rb,h,seg),m,x,y,z,parent)}
+// distant shore and temple platform
+box(100,.8,22,mat(0x172536),0,-.55,-25);
+for(let i=0;i<7;i++){const x=-28+i*9;box(5,2.4,1.1,wood,x,1,-24);for(let j=0;j<3;j++)box(1.1,.5,.3,gold,x-1.5+j*1.5,2.5,-24.3)}
+// Thai temple buildings, layered roof silhouettes
+function temple(x,z,s=1){const g=new THREE.Group();g.position.set(x,0,z);g.scale.setScalar(s);scene.add(g);box(9,3.2,6,mat(0x8b6b51),0,2,0,g);box(10,.45,7,gold,0,3.8,0,g);
+for(let k=0;k<3;k++){const roof=addMesh(new THREE.ConeGeometry(7-k*1.25,2.5,4),red,0,5.1+k*1.55,0,g);roof.rotation.y=Math.PI/4;roof.scale.z=.58;box(10-k*2,.16,7-k*1.5,gold,0,4.1+k*1.55,0,g)}
+cyl(.12,.22,5,gold,0,10.5,0,12,g);const fin=addMesh(new THREE.ConeGeometry(.32,1.5,8),gold,0,13.5,0,g);fin.rotation.z=Math.PI;for(let i=0;i<4;i++){const xx=-3.4+i*2.25;box(.45,2.2,.35,gold,xx,1.5,3.05,g);box(.8,.2,.5,white,xx,2.65,3.05,g)}}
+temple(-20,-26,1.1);temple(20,-29,.82);
+// chedis and trees on shore
+function chedi(x,z,s){const g=new THREE.Group();g.position.set(x,0,z);g.scale.setScalar(s);scene.add(g);cyl(2.1,2.6,1,gold,0,.5,0,24,g);cyl(1.35,2,2.2,white,0,2,0,24,g);const d=addMesh(new THREE.SphereGeometry(1.35,24,20),gold,0,3.4,0,g);d.scale.y=1.5;const sp=addMesh(new THREE.ConeGeometry(.7,5,16),gold,0,7.1,0,g);sp.rotation.z=Math.PI}
+chedi(-32,-20,1.05);chedi(31,-22,.85);
+const ground=box(100,.7,16,mat(0x263c37),0,-.8,-10); // shore strip
+// ornamental lantern poles
+for(let i=0;i<14;i++){const x=-33+i*5; cyl(.09,.13,7,wood,x,3.1,-8,10);const lamp=addMesh(new THREE.SphereGeometry(.42,16,12),mat(0xffb45b,.3),x,6.8,-8);const glow=new THREE.PointLight(0xffa44d,3,7);glow.position.set(x,6.8,-8);scene.add(glow)}
+// moon
+const moon=addMesh(new THREE.SphereGeometry(3,32,24),mat(0xffe9c4,.3),18,22,-48);const moonGlow=new THREE.PointLight(0xffdba0,100,90);moonGlow.position.set(18,20,-38);scene.add(moonGlow);
+// star field
+const stars=new THREE.BufferGeometry(),starPos=[];for(let i=0;i<900;i++)starPos.push((Math.random()-.5)*130,8+Math.random()*42,-55-Math.random()*50);stars.setAttribute('position',new THREE.Float32BufferAttribute(starPos,3));scene.add(new THREE.Points(stars,new THREE.PointsMaterial({color:0xffe9c8,size:.16,transparent:true,opacity:.8})));
+// water plane with custom shader waves
+const waterGeo=new THREE.PlaneGeometry(100,68,180,130);waterGeo.rotateX(-Math.PI/2);const water=addMesh(waterGeo,waterMat,0,-.12,12);water.material.onBeforeCompile=shader=>{shader.vertexShader=shader.vertexShader.replace('#include <begin_vertex>',`#include <begin_vertex>\ntransformed.y += sin(position.x*0.45 + uTime*1.2)*0.07 + cos(position.z*0.55+uTime*.9)*0.055;`);shader.vertexShader=shader.vertexShader.replace('void main() {','uniform float uTime;\nvoid main() {');shader.fragmentShader=shader.fragmentShader.replace('void main() {','uniform float uTime;\nvoid main() {');shader.uniforms.uTime={value:0};water.userData.shader=shader};water.material.needsUpdate=true;
+// water shimmer lines
+const shimmer=[];for(let i=0;i<100;i++){const line=addMesh(new THREE.PlaneGeometry(THREE.MathUtils.randFloat(.5,3),.025),new THREE.MeshBasicMaterial({color:0x9ed5e4,transparent:true,opacity:Math.random()*.18+.04}),THREE.MathUtils.randFloatSpread(80),.01,THREE.MathUtils.randFloat(-15,40));line.rotation.x=-Math.PI/2;shimmer.push(line)}
+// realistic floating krathong model
+const floating=[];let count=0;
+function makeKrathong(type='leaf',decor='flower'){const g=new THREE.Group();const baseMat=type==='bread'?mat(0xc99557,.9):type==='coconut'?mat(0x705039,.9):leaf;
+const base=cyl(.05,1.05,.24,baseMat,0,0,0,48,g);base.scale.z=.82;
+for(let i=0;i<18;i++){const a=i*Math.PI*2/18;const petal=addMesh(new THREE.SphereGeometry(.55,14,10),i%2?leaf:leafLight,Math.cos(a)*.72,.12,Math.sin(a)*.58,g);petal.scale.set(.42,.13,.88);petal.rotation.y=-a}
+for(let ring=0;ring<2;ring++)for(let i=0;i<10;i++){const a=i*Math.PI*2/10+ring*.28;const f=addMesh(new THREE.SphereGeometry(.2,12,10),decor==='lotus'?pink:decor==='marigold'?mat(0xffb52f):pink,Math.cos(a)*(.48-ring*.2),.25+ring*.06,Math.sin(a)*(.4-ring*.16),g);f.scale.set(.7,.38,.7)}
+cyl(.12,.16,.3,gold,0,.28,0,12,g);const candle=addMesh(new THREE.CylinderGeometry(.045,.055,.32,12),white,0,.53,0,g);const flame=addMesh(new THREE.SphereGeometry(.085,12,10),mat(0xff9c31,.25),0,.76,0,g);flame.scale.set(.7,1.8,.7);const glow=new THREE.PointLight(0xff9b39,1.4,4);glow.position.set(0,.8,0);g.add(glow);
+for(let i=0;i<3;i++){const incense=addMesh(new THREE.CylinderGeometry(.012,.018,.42,6),wood,Math.cos(i*2.1)*.2,.57,Math.sin(i*2.1)*.2,g);incense.rotation.z=(i-1)*.18}
+g.userData={phase:Math.random()*6.28,flame,glow};return g}
+function launchKrathong(type,decor){const g=makeKrathong(type,decor);const x=(Math.random()-.5)*7;g.position.set(x,-.02,18+Math.random()*5);scene.add(g);floating.push(g);count++;$('#nKrathong').textContent=count;toast('กระทงของคุณกำลังลอยไปกับสายน้ำ ✨')}
+for(let i=0;i<18;i++){const g=makeKrathong(i%4===0?'lotus':'leaf',i%3===0?'marigold':'flower');g.scale.setScalar(.55+Math.random()*.3);g.position.set(THREE.MathUtils.randFloatSpread(75),-.05,THREE.MathUtils.randFloat(-12,42));g.userData.drift=THREE.MathUtils.randFloat(.3,1);scene.add(g);floating.push(g)}
+// firework particles
+const effects=[];function burst(x,y,z,color){const group=new THREE.Group();scene.add(group);const positions=[],vel=[];for(let i=0;i<180;i++){const v=new THREE.Vector3(Math.random()-.5,Math.random()-.5,Math.random()-.5).normalize().multiplyScalar(THREE.MathUtils.randFloat(2,8));vel.push(v);positions.push(0,0,0)}const geo=new THREE.BufferGeometry();geo.setAttribute('position',new THREE.Float32BufferAttribute(positions,3));const points=new THREE.Points(geo,new THREE.PointsMaterial({color,size:.18,transparent:true,opacity:1,blending:THREE.AdditiveBlending,depthWrite:false}));group.add(points);group.position.set(x,y,z);effects.push({group,points,vel,age:0});const light=new THREE.PointLight(color,30,25);light.position.set(x,y,z);scene.add(light);setTimeout(()=>scene.remove(light),900)}
+function shootFirework(color){const x=THREE.MathUtils.randFloat(-18,18),z=THREE.MathUtils.randFloat(-35,-12),y=THREE.MathUtils.randFloat(12,21);const rocket=addMesh(new THREE.SphereGeometry(.12,8,8),mat(color,.2),x,2,z);let t=0;const step=()=>{t+=.045;rocket.position.y=2+t*16;if(rocket.position.y>=y){scene.remove(rocket);burst(x,y,z,color);return}requestAnimationFrame(step)};step()}
+const lanterns=[];function makeLantern(color=0xffb64d){const g=new THREE.Group();const paper=new THREE.MeshStandardMaterial({color,roughness:.7,transparent:true,opacity:.88,side:THREE.DoubleSide,emissive:color,emissiveIntensity:.12});const body=addMesh(new THREE.CylinderGeometry(.35,.52,1.25,16,1,true),paper,0,0,0,g);body.scale.set(1,1,1);const top=cyl(.36,.36,.06,gold,0,.64,0,16,g);const bottom=cyl(.48,.48,.07,darkGold,0,-.64,0,16,g);const fire=addMesh(new THREE.SphereGeometry(.12,12,8),mat(0xff9b36,.25),0,-.5,0,g);const light=new THREE.PointLight(color,1.8,5);light.position.set(0,-.45,0);g.add(light);return g}
+function releaseLantern(color){const g=makeLantern(color);g.position.set(THREE.MathUtils.randFloat(-5,5),1,THREE.MathUtils.randFloat(4,14));g.userData={speed:THREE.MathUtils.randFloat(1.5,2.5),sway:Math.random()*6};scene.add(g);lanterns.push(g);toast('โคมของคุณกำลังลอยขึ้นสู่ท้องฟ้า 🏮')}
+function toast(t){const el=$('#toast');el.textContent=t;el.style.opacity=1;el.style.transform='translate(-50%,0)';clearTimeout(toast.timer);toast.timer=setTimeout(()=>{el.style.opacity=0;el.style.transform='translate(-50%,-8px)'},2300)}
+const modal=$('#modal'),card=$('#card');function show(html){card.innerHTML=html;modal.style.display='flex'}function close(){modal.style.display='none'}modal.addEventListener('click',e=>{if(e.target===modal)close()});
+$('#openKrathong').onclick=()=>{show(`<h2>🪷 ประดิษฐ์กระทงของคุณ</h2><p>เลือกฐานและดอกไม้ตกแต่ง แล้วเขียนคำอธิษฐานก่อนปล่อยกระทงลงบึง</p><label class="label">เลือกฐานกระทง</label><div class="grid" id="bases"><button class="tile active" data-v="leaf"><span>🌿</span>ใบตอง</button><button class="tile" data-v="lotus"><span>🪷</span>ดอกบัว</button><button class="tile" data-v="bread"><span>🍞</span>ขนมปัง</button></div><label class="label">ดอกไม้ประดับ</label><div class="grid" id="flowers"><button class="tile active" data-v="flower"><span>🌸</span>ดอกมะลิ</button><button class="tile" data-v="lotus"><span>🪷</span>ดอกบัว</button><button class="tile" data-v="marigold"><span>🌼</span>ดาวเรือง</button></div><label class="label">คำอธิษฐาน (ไม่บังคับ)</label><textarea id="wish" maxlength="100" placeholder="ขอให้พบเจอแต่สิ่งดี ๆ ..."></textarea><div class="row"><button class="btn" id="cancel">ยกเลิก</button><button class="btn gold" id="releaseK">🕯️ จุดเทียนและปล่อยกระทง</button></div><div class="hint">หลังยืนยัน กระทงจะปรากฏบนผิวน้ำพร้อมแสงเทียนและลอยไปตามคลื่น</div>`);let base='leaf',flower='flower';$('#bases').onclick=e=>{const b=e.target.closest('button');if(!b)return;base=b.dataset.v;selectActive('#bases',b)};$('#flowers').onclick=e=>{const b=e.target.closest('button');if(!b)return;flower=b.dataset.v;selectActive('#flowers',b)};$('#cancel').onclick=close;$('#releaseK').onclick=()=>{launchKrathong(base,flower);close()}}
+function selectActive(parent,b){$(parent).querySelectorAll('button').forEach(x=>x.classList.remove('active'));b.classList.add('active')}
+$('#openFirework').onclick=()=>{show(`<h2>🎆 ออกแบบพลุแห่งความสุข</h2><p>เลือกสีของดอกไม้ไฟ แล้วจุดพลุให้สว่างไสวเหนือบึงน้ำ</p><label class="label">เลือกสีพลุ</label><div class="grid" id="colors"><button class="tile active" data-c="16763903"><span>✨</span>ทอง</button><button class="tile" data-c="16733525"><span>💗</span>ชมพู</button><button class="tile" data-c="6015743"><span>💙</span>ฟ้า</button><button class="tile" data-c="16736546"><span>❤️</span>แดง</button><button class="tile" data-c="10079232"><span>💚</span>เขียว</button><button class="tile" data-c="16763903"><span>🌟</span>ทองอร่าม</button></div><label class="label">ข้อความอธิษฐาน</label><input id="fwWish" maxlength="32" placeholder="สุขสันต์วันลอยกระทง"><div class="row"><button class="btn" id="cancel">กลับ</button><button class="btn gold" id="fireNow">🚀 จุดพลุขึ้นฟ้า</button></div><div class="hint">พลุจะพุ่งขึ้นก่อนแตกกระจายเป็นประกายไฟจำนวนมากเหนือท้องฟ้า</div>`);let color=0xffb85a;$('#colors').onclick=e=>{const b=e.target.closest('button');if(!b)return;color=Number(b.dataset.c);selectActive('#colors',b)};$('#cancel').onclick=close;$('#fireNow').onclick=()=>{shootFirework(color);setTimeout(()=>shootFirework(color),450);setTimeout(()=>shootFirework(0xffe9b0),950);close();toast('จุดพลุเฉลิมฉลองเหนือบึงน้ำ 🎆')}}
+$('#openLantern').onclick=()=>{show(`<h2>🏮 ปล่อยโคมแห่งคำอธิษฐาน</h2><p>เลือกสีโคม เขียนคำอธิษฐาน แล้วจุดไฟปล่อยโคมขึ้นสู่ท้องฟ้า</p><label class="label">เลือกสีโคม</label><div class="grid" id="lanternColors"><button class="tile active" data-c="16757837"><span>🏮</span>ทอง</button><button class="tile" data-c="16737992"><span>🌸</span>ชมพู</button><button class="tile" data-c="7654143"><span>💙</span>ฟ้า</button><button class="tile" data-c="16737620"><span>❤️</span>แดง</button><button class="tile" data-c="11059152"><span>💚</span>เขียว</button><button class="tile" data-c="16771020"><span>🤍</span>ครีม</button></div><label class="label">คำอธิษฐาน</label><textarea id="lanternWish" maxlength="90" placeholder="ขอให้ครอบครัวมีความสุข สุขภาพแข็งแรง"></textarea><div class="row"><button class="btn" id="cancel">กลับ</button><button class="btn gold" id="letGo">🔥 จุดไฟและปล่อยโคม</button></div><div class="hint">โคมจะค่อย ๆ ลอยสูงขึ้น แกว่งไหวตามลม และกลายเป็นแสงเล็ก ๆ บนท้องฟ้า</div>`);let color=0xffb64d;$('#lanternColors').onclick=e=>{const b=e.target.closest('button');if(!b)return;color=Number(b.dataset.c);selectActive('#lanternColors',b)};$('#cancel').onclick=close;$('#letGo').onclick=()=>{releaseLantern(color);close()}}
+$('#enter').onclick=()=>{$('#intro').style.display='none';toast('ยินดีต้อนรับสู่งานลอยกระทง KKN ✨')};
+// School logo
+const logoUrl='assets/kkn-logo.jpg';for(const id of ['logoTop','logoIntro']){const im=new Image();im.src=logoUrl;im.onload=()=>{$('#'+id).innerHTML='';$('#'+id).appendChild(im.cloneNode())}}
+const clock=new THREE.Clock();function animate(){requestAnimationFrame(animate);const t=clock.getElapsedTime();if(water.userData.shader)water.userData.shader.uniforms.uTime.value=t;
+for(const g of floating){const p=g.userData.phase||0;g.position.y=-.02+Math.sin(t*1.1+p)*.045;g.position.x+=Math.sin(t*.18+p)*.0008;g.rotation.y+=.0008;g.rotation.z=Math.sin(t*.6+p)*.012;if(g.userData.flame){g.userData.flame.scale.y=1.5+Math.sin(t*8+p)*.3;g.userData.glow.intensity=1.2+Math.sin(t*7+p)*.35}}
+for(const g of lanterns){g.position.y+=g.userData.speed*.012;g.position.x+=Math.sin(t+g.userData.sway)*.008;g.rotation.z=Math.sin(t*.7+g.userData.sway)*.06;if(g.position.y>34)scene.remove(g)}
+for(let i=effects.length-1;i>=0;i--){const e=effects[i];e.age+=.016;const a=e.points.geometry.attributes.position;for(let j=0;j<e.vel.length;j++){e.vel[j].y-=.045;a.array[j*3]+=e.vel[j].x*.016;a.array[j*3+1]+=e.vel[j].y*.016;a.array[j*3+2]+=e.vel[j].z*.016}a.needsUpdate=true;e.points.material.opacity=Math.max(0,1-e.age/2.1);if(e.age>2.1){scene.remove(e.group);e.points.geometry.dispose();effects.splice(i,1)}}
+shimmer.forEach((s,i)=>{s.position.x+=Math.sin(t*.4+i)*.002;s.material.opacity=.04+Math.abs(Math.sin(t*1.4+i))* .14});
+renderer.render(scene,camera)}animate();
+addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);renderer.setPixelRatio(Math.min(devicePixelRatio,1.7))});
+</script></body></html>
